@@ -9,6 +9,7 @@ let nextGeneration = [];
 let grid = document.getElementById("grid");
 let gameCycle = document.getElementById("game-cycle-button");
 let gameStart = document.getElementById("game-run");
+let randomize = document.getElementById("ramdomize");
 
 function createLattice(rows, columns) {
   for (let index = 0; index < rows; index++) {
@@ -62,7 +63,6 @@ function populationRules(cell, totalAdjacent, x, y) {
     }
   } else if (totalAdjacent === 3) {
     nextGeneration[x][y] = 1;
-    console.log("here?");
     updateCell(x, y, ALIVE);
   }
 }
@@ -121,8 +121,25 @@ function runGame() {
   const id = setInterval(updateGeneration.bind(this, rows, columns), 100);
 }
 
+function randomizeLattice() {
+  for (let x = 0; x < rows; x++) {
+    for (let y = 0; y < columns; y++) {
+      const cellValue = Math.floor(Math.random() * 2 + 0);
+
+      lattice[x][y] = cellValue;
+      nextGeneration[x][y] = cellValue;
+      if (cellValue === 1) {
+        updateCell(x, y, ALIVE);
+      } else {
+        updateCell(x, y, DEAD);
+      }
+    }
+  }
+}
+
 createLattice(rows, columns);
 paintGrid(lattice);
 
 gameCycle.addEventListener("click", updateGeneration.bind(this, rows, columns));
 gameStart.addEventListener("click", runGame);
+randomize.addEventListener("click", randomizeLattice);
